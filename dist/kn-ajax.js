@@ -11,7 +11,7 @@
     require('angular');
     var moduleName = 'kn-ajax';
     angular.module(moduleName, [])
-        .constant('apiUrl', '')
+        .value('apiUrl', '')
         .service({
         $ajaxHelpers: _ajaxHelpers_1.AjaxHelpers
     });

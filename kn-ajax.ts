@@ -3,7 +3,7 @@ import 'angular';
 
 var moduleName = 'kn-ajax';
 angular.module(moduleName, [])
-    .constant('apiUrl', '')
+    .value('apiUrl', '')
     .service({
         $ajaxHelpers: AjaxHelpers
     });
