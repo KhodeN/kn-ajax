@@ -1,0 +1,22 @@
+{
+  "name": "kn-ajax",
+  "homepage": "https://github.com/KhodeN/kn-ajax",
+  "authors": [
+    "Artem Berezin <berezin.artem@gmail.com>"
+  ],
+  "description": "",
+  "main": "dist/kn-ajax.js",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.2",
+    "lodashExt": "KhodeN/lodashExt#^0.0.2"
+  }
+}
