@@ -10,7 +10,6 @@
     require('lodashExt');
     var AjaxHelpers = (function () {
         function AjaxHelpers($http, $q, $timeout, apiUrl) {
-            'ngInject';
             this.$http = $http;
             this.$q = $q;
             this.$timeout = $timeout;
@@ -161,6 +160,7 @@
             };
             return result;
         };
+        AjaxHelpers.$inject = ['$http', '$q', '$timeout', 'apiUrl'];
         return AjaxHelpers;
     }());
     exports.AjaxHelpers = AjaxHelpers;

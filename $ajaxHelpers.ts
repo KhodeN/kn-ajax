@@ -29,11 +29,12 @@ import 'lodashExt';
  * @singleton
  */
 export class AjaxHelpers implements KN.IAjaxHelpersService {
+    public static $inject = ['$http', '$q', '$timeout', 'apiUrl'];
+
     constructor(private $http: ng.IHttpService,
                 private $q: ng.IQService,
                 private $timeout: ng.ITimeoutService,
                 private apiUrl: string) {
-        'ngInject';
     }
 
     /**
