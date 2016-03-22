@@ -53,7 +53,7 @@ export class AjaxHelpers implements KN.IAjaxHelpersService {
 
         let deferred = this._addCanceling(config);
 
-        url = this._buildUrl(url, params, config && config.noApi);
+        url = this.buildUrl(url, params, config && config.noApi);
 
         return this._convertToPromise(this.$http.get(url, config), deferred);
     }
@@ -66,7 +66,7 @@ export class AjaxHelpers implements KN.IAjaxHelpersService {
 
         let deferred = this._addCanceling(config);
 
-        url = this._buildUrl(url, params, config && config.noApi);
+        url = this.buildUrl(url, params, config && config.noApi);
 
         return this._convertToPromise(this.$http.delete(url, config), deferred);
     }
@@ -81,7 +81,7 @@ export class AjaxHelpers implements KN.IAjaxHelpersService {
      */
     public POST(url: string, data?: any, config?: KN.IRequestConfig) {
         config = config || {};
-        url = this._buildUrl(url, config.params, config.noApi);
+        url = this.buildUrl(url, config.params, config.noApi);
 
         let deferred = this._addCanceling(config);
 
@@ -90,7 +90,7 @@ export class AjaxHelpers implements KN.IAjaxHelpersService {
 
     public PUT(url: string, data?: any, config?: KN.IRequestConfig) {
         config = config || {};
-        url = this._buildUrl(url, config.params, config.noApi);
+        url = this.buildUrl(url, config.params, config.noApi);
 
         let deferred = this._addCanceling(config);
 
@@ -107,7 +107,7 @@ export class AjaxHelpers implements KN.IAjaxHelpersService {
      */
     public buildCacheKey(url: string, params?: any) {
         params = params || {};
-        url = this._buildUrl(url, params);
+        url = this.buildUrl(url, params);
 
         let pairs: string[] = [];
         _.forEach(params, function (value, key) {
@@ -121,6 +121,22 @@ export class AjaxHelpers implements KN.IAjaxHelpersService {
         });
 
         return url + (_.isEmpty(pairs) ? '' : pairs.join('&'));
+    }
+
+    public buildUrl(url: string, params: any, noApi = false) {
+        url = url.replace(/\{(\w+?)\}/g, function (match, field) {
+            if ( _.has(params, field) ) {
+                let value = params[field];
+                delete params[field];
+                return encodeURIComponent(value);
+            } else {
+                return match;
+            }
+        });
+        if ( !(noApi || _.startsWith(url, 'http')) ) {
+            url = this.apiUrl + url;
+        }
+        return url;
     }
 
     private _addCanceling(config?: KN.IRequestConfig) {
@@ -140,21 +156,6 @@ export class AjaxHelpers implements KN.IAjaxHelpersService {
         return deferred;
     }
 
-    private _buildUrl(url: string, params: any, noApi = false) {
-        url = url.replace(/\{(\w+?)\}/g, function (match, field) {
-            if ( _.has(params, field) ) {
-                let value = params[field];
-                delete params[field];
-                return encodeURIComponent(value);
-            } else {
-                return match;
-            }
-        });
-        if ( !(noApi || _.startsWith(url, 'http')) ) {
-            url = this.apiUrl + url;
-        }
-        return url;
-    }
 
     /**
      * Конвертирует HttpPromise от $http в обычный Promise

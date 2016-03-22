@@ -21,7 +21,7 @@
                 params: _.isUndefined(params) ? {} : params
             });
             var deferred = this._addCanceling(config);
-            url = this._buildUrl(url, params, config && config.noApi);
+            url = this.buildUrl(url, params, config && config.noApi);
             return this._convertToPromise(this.$http.get(url, config), deferred);
         };
         AjaxHelpers.prototype.DELETE = function (url, params, config) {
@@ -30,24 +30,24 @@
                 params: _.isUndefined(params) ? {} : params
             });
             var deferred = this._addCanceling(config);
-            url = this._buildUrl(url, params, config && config.noApi);
+            url = this.buildUrl(url, params, config && config.noApi);
             return this._convertToPromise(this.$http.delete(url, config), deferred);
         };
         AjaxHelpers.prototype.POST = function (url, data, config) {
             config = config || {};
-            url = this._buildUrl(url, config.params, config.noApi);
+            url = this.buildUrl(url, config.params, config.noApi);
             var deferred = this._addCanceling(config);
             return this._convertToPromise(this.$http.post(url, _.omitPrivateFields(data), config), deferred);
         };
         AjaxHelpers.prototype.PUT = function (url, data, config) {
             config = config || {};
-            url = this._buildUrl(url, config.params, config.noApi);
+            url = this.buildUrl(url, config.params, config.noApi);
             var deferred = this._addCanceling(config);
             return this._convertToPromise(this.$http.put(url, _.omitPrivateFields(data), config), deferred);
         };
         AjaxHelpers.prototype.buildCacheKey = function (url, params) {
             params = params || {};
-            url = this._buildUrl(url, params);
+            url = this.buildUrl(url, params);
             var pairs = [];
             _.forEach(params, function (value, key) {
                 if (_.isUndefined(value) || _.isNull(value)) {
@@ -60,20 +60,7 @@
             });
             return url + (_.isEmpty(pairs) ? '' : pairs.join('&'));
         };
-        AjaxHelpers.prototype._addCanceling = function (config) {
-            var deferred = this.$q.defer();
-            var oldTimeout = config.timeout;
-            var resolve = _.bind(deferred.resolve, deferred);
-            if (_.isNumber(oldTimeout)) {
-                this.$timeout(resolve, oldTimeout);
-            }
-            if (_.isPromise(oldTimeout)) {
-                oldTimeout.then(resolve);
-            }
-            config.timeout = deferred.promise;
-            return deferred;
-        };
-        AjaxHelpers.prototype._buildUrl = function (url, params, noApi) {
+        AjaxHelpers.prototype.buildUrl = function (url, params, noApi) {
             if (noApi === void 0) { noApi = false; }
             url = url.replace(/\{(\w+?)\}/g, function (match, field) {
                 if (_.has(params, field)) {
@@ -89,6 +76,19 @@
                 url = this.apiUrl + url;
             }
             return url;
+        };
+        AjaxHelpers.prototype._addCanceling = function (config) {
+            var deferred = this.$q.defer();
+            var oldTimeout = config.timeout;
+            var resolve = _.bind(deferred.resolve, deferred);
+            if (_.isNumber(oldTimeout)) {
+                this.$timeout(resolve, oldTimeout);
+            }
+            if (_.isPromise(oldTimeout)) {
+                oldTimeout.then(resolve);
+            }
+            config.timeout = deferred.promise;
+            return deferred;
         };
         AjaxHelpers.prototype._convertToPromise = function (httpPromise, timeoutDeferred) {
             var self = this;

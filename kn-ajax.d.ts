@@ -19,5 +19,6 @@ declare namespace KN {
         DELETE<T>(url: string, params?: any, config?: IRequestConfig): IHttpPromise<T>;
         POST<T>(url: string, data?: any, config?: IRequestConfig): IHttpPromise<T>;
         PUT<T>(url: string, data?: any, config?: IRequestConfig): IHttpPromise<T>;
+        buildUrl(url: string, params: any, noApi?: boolean): string;
     }
 }
