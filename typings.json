@@ -1,10 +1,10 @@
 {
-  "version": false,
+  "name": "kn-ajax",
   "dependencies": {},
-  "ambientDependencies": {
-    "angular": "registry:dt/angular#1.5.0+20160318102130",
-    "jquery": "registry:dt/jquery#1.10.0+20160316155526",
+  "globalDependencies": {
+    "angular": "registry:dt/angular#1.5.0+20160725073351",
+    "jquery": "registry:dt/jquery#1.10.0+20160704162008",
     "lodash": "github:DefinitelyTyped/DefinitelyTyped/lodash/lodash.d.ts",
-    "lodashExt": "github:khoden/lodashExt/lodashExt.d.ts"
+    "lodash-ext": "github:khoden/lodashExt/lodashExt.d.ts#163a30c"
   }
 }

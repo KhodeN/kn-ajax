@@ -1,5 +1,5 @@
 /// <reference path="./kn-ajax.d.ts" />
-import 'lodashExt';
+let _ = require<_.LoDashStatic>("lodash-ext");
 
 /**
  * Методы для удобной работы с AJAX
@@ -110,7 +110,7 @@ export class AjaxHelpers implements KN.IAjaxHelpersService {
         url = this.buildUrl(url, params);
 
         let pairs: string[] = [];
-        _.forEach(params, function (value, key) {
+        _.forEach(params, function (value: any, key: string) {
             if ( _.isUndefined(value) || _.isNull(value) ) {
                 return;
             }

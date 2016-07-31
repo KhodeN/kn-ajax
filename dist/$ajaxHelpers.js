@@ -1,5 +1,5 @@
 "use strict";
-require('lodashExt');
+var _ = require("lodash-ext");
 var AjaxHelpers = (function () {
     function AjaxHelpers($http, $q, $timeout, apiUrl) {
         this.$http = $http;

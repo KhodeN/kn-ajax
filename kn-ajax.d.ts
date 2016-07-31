@@ -1,3 +1,5 @@
+/// <reference path="./typings/index.d.ts"/>
+
 declare namespace KN {
     interface IRequestConfig extends ng.IRequestShortcutConfig {
         noApi?: boolean;
@@ -22,3 +24,9 @@ declare namespace KN {
         buildUrl(url: string, params: any, noApi?: boolean): string;
     }
 }
+
+declare var require: {
+    <T>(path: string): T;
+    (paths: string[], callback: (...modules: any[]) => void): void;
+    ensure: (paths: string[], callback: (require: <T>(path: string) => T) => void) => void;
+};
