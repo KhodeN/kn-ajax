@@ -1,5 +1,5 @@
 "use strict";
-var _ = require("lodash-ext");
+var lodash_ext_1 = require('lodash-ext');
 var AjaxHelpers = (function () {
     function AjaxHelpers($http, $q, $timeout, apiUrl) {
         this.$http = $http;
@@ -9,8 +9,8 @@ var AjaxHelpers = (function () {
     }
     AjaxHelpers.prototype.GET = function (url, params, config) {
         config = config || {};
-        _.assign(config, {
-            params: _.isUndefined(params) ? {} : params
+        lodash_ext_1.default.assign(config, {
+            params: lodash_ext_1.default.isUndefined(params) ? {} : params
         });
         var deferred = this._addCanceling(config);
         url = this.buildUrl(url, params, config && config.noApi);
@@ -18,8 +18,8 @@ var AjaxHelpers = (function () {
     };
     AjaxHelpers.prototype.DELETE = function (url, params, config) {
         config = config || {};
-        _.assign(config, {
-            params: _.isUndefined(params) ? {} : params
+        lodash_ext_1.default.assign(config, {
+            params: lodash_ext_1.default.isUndefined(params) ? {} : params
         });
         var deferred = this._addCanceling(config);
         url = this.buildUrl(url, params, config && config.noApi);
@@ -29,33 +29,33 @@ var AjaxHelpers = (function () {
         config = config || {};
         url = this.buildUrl(url, config.params, config.noApi);
         var deferred = this._addCanceling(config);
-        return this._convertToPromise(this.$http.post(url, _.omitPrivateFields(data), config), deferred);
+        return this._convertToPromise(this.$http.post(url, lodash_ext_1.default.omitPrivateFields(data), config), deferred);
     };
     AjaxHelpers.prototype.PUT = function (url, data, config) {
         config = config || {};
         url = this.buildUrl(url, config.params, config.noApi);
         var deferred = this._addCanceling(config);
-        return this._convertToPromise(this.$http.put(url, _.omitPrivateFields(data), config), deferred);
+        return this._convertToPromise(this.$http.put(url, lodash_ext_1.default.omitPrivateFields(data), config), deferred);
     };
     AjaxHelpers.prototype.buildCacheKey = function (url, params) {
         params = params || {};
         url = this.buildUrl(url, params);
         var pairs = [];
-        _.forEach(params, function (value, key) {
-            if (_.isUndefined(value) || _.isNull(value)) {
+        lodash_ext_1.default.forEach(params, function (value, key) {
+            if (lodash_ext_1.default.isUndefined(value) || lodash_ext_1.default.isNull(value)) {
                 return;
             }
-            if (_.isArray(value)) {
+            if (lodash_ext_1.default.isArray(value)) {
                 value = value.join(',');
             }
             pairs.push([key, value].join('='));
         });
-        return url + (_.isEmpty(pairs) ? '' : pairs.join('&'));
+        return url + (lodash_ext_1.default.isEmpty(pairs) ? '' : pairs.join('&'));
     };
     AjaxHelpers.prototype.buildUrl = function (url, params, noApi) {
         if (noApi === void 0) { noApi = false; }
         url = url.replace(/\{(\w+?)\}/g, function (match, field) {
-            if (_.has(params, field)) {
+            if (lodash_ext_1.default.has(params, field)) {
                 var value = params[field];
                 delete params[field];
                 return encodeURIComponent(value);
@@ -64,7 +64,7 @@ var AjaxHelpers = (function () {
                 return match;
             }
         });
-        if (!(noApi || _.startsWith(url, 'http'))) {
+        if (!(noApi || lodash_ext_1.default.startsWith(url, 'http'))) {
             url = this.apiUrl + url;
         }
         return url;
@@ -72,11 +72,11 @@ var AjaxHelpers = (function () {
     AjaxHelpers.prototype._addCanceling = function (config) {
         var deferred = this.$q.defer();
         var oldTimeout = config.timeout;
-        var resolve = _.bind(deferred.resolve, deferred);
-        if (_.isNumber(oldTimeout)) {
+        var resolve = lodash_ext_1.default.bind(deferred.resolve, deferred);
+        if (lodash_ext_1.default.isNumber(oldTimeout)) {
             this.$timeout(resolve, oldTimeout);
         }
-        if (_.isPromise(oldTimeout)) {
+        if (lodash_ext_1.default.isPromise(oldTimeout)) {
             oldTimeout.then(resolve);
         }
         config.timeout = deferred.promise;
@@ -91,18 +91,18 @@ var AjaxHelpers = (function () {
         function parseErrorString(string) {
             var msg;
             var stack;
-            if (_.includes(string, '<title>')) {
+            if (lodash_ext_1.default.includes(string, '<title>')) {
                 msg = string.match(/<title>([\s\S]+?)<\/title>/)[1];
                 stack = [string];
             }
-            else if (_.includes(string, '<h1>')) {
+            else if (lodash_ext_1.default.includes(string, '<h1>')) {
                 msg = string.match(/<h1>([\s\S]+?)<\/h1>/)[1];
                 stack = [string];
             }
             else {
-                var rows = _.compact(string.split('\n'));
-                msg = _.first(rows);
-                stack = _.tail(rows);
+                var rows = lodash_ext_1.default.compact(string.split('\n'));
+                msg = lodash_ext_1.default.first(rows);
+                stack = lodash_ext_1.default.tail(rows);
             }
             return {
                 message: msg,
@@ -114,10 +114,10 @@ var AjaxHelpers = (function () {
         }
         function successCallback(response) {
             var data = response.data;
-            if (_.isObject(data)) {
+            if (lodash_ext_1.default.isObject(data)) {
                 data._status = response.status;
-                data._headers = _.isFunction(response.headers) ? response.headers() : {};
-                if (_.has(data._headers, 'x-total-count')) {
+                data._headers = lodash_ext_1.default.isFunction(response.headers) ? response.headers() : {};
+                if (lodash_ext_1.default.has(data._headers, 'x-total-count')) {
                     data._total = data._headers['x-total-count'];
                 }
             }
@@ -125,23 +125,23 @@ var AjaxHelpers = (function () {
         }
         function errorCallback(response) {
             var data = response.data;
-            if (_.isUndefined(data) || _.isNull(data) || data === 'null' || isEmptyString(data)) {
+            if (lodash_ext_1.default.isUndefined(data) || lodash_ext_1.default.isNull(data) || data === 'null' || isEmptyString(data)) {
                 data = {};
             }
-            else if (_.isString(data)) {
+            else if (lodash_ext_1.default.isString(data)) {
                 data = parseErrorString(data);
             }
             data.isCancelled = function () {
                 return response.status === 0;
             };
             data._status = status;
-            data._headers = _.isFunction(response.headers) ? response.headers() : {};
+            data._headers = lodash_ext_1.default.isFunction(response.headers) ? response.headers() : {};
             deferred.reject(data);
         }
         httpPromise.then(successCallback, errorCallback);
         var result = deferred.promise;
         var delay = parseInt(localStorage.getItem('delay') || 0, 10);
-        var delayedPromise = _.constant(self.$timeout(_.constant(deferred.promise), delay));
+        var delayedPromise = lodash_ext_1.default.constant(self.$timeout(lodash_ext_1.default.constant(deferred.promise), delay));
         if (delay > 0) {
             result = deferred.promise.then(delayedPromise, delayedPromise);
         }

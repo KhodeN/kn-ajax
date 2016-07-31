@@ -1,5 +1,5 @@
 /// <reference path="./kn-ajax.d.ts" />
-let _ = require<_.LoDashStatic>("lodash-ext");
+import _ from 'lodash-ext';
 
 /**
  * Методы для удобной работы с AJAX

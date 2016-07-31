@@ -24,9 +24,7 @@ declare namespace KN {
         buildUrl(url: string, params: any, noApi?: boolean): string;
     }
 }
-
-declare var require: {
-    <T>(path: string): T;
-    (paths: string[], callback: (...modules: any[]) => void): void;
-    ensure: (paths: string[], callback: (require: <T>(path: string) => T) => void) => void;
-};
+declare module 'lodash-ext' {
+    var _: _.LoDashStatic;
+    export default _;
+}
