@@ -3,6 +3,8 @@
 declare namespace KN {
     interface IRequestConfig extends ng.IRequestShortcutConfig {
         noApi?: boolean;
+        method?: string;
+        url?: string;
     }
 
     interface IHttpPromise<T> extends ng.IPromise<T> {
@@ -23,6 +25,12 @@ declare namespace KN {
         PUT<T>(url: string, data?: any, config?: IRequestConfig): IHttpPromise<T>;
         buildUrl(url: string, params: any, noApi?: boolean): string;
     }
+}
+declare namespace angular {
+    interface IHttpService {
+        <T>(config: KN.IRequestConfig): IHttpPromise<T>;
+    }
+
 }
 declare module 'lodash-ext' {
     var _: _.LoDashStatic;

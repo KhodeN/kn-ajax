@@ -1,5 +1,5 @@
 /// <reference path="./kn-ajax.d.ts" />
-import _ from 'lodash-ext';
+import _ from "lodash-ext";
 
 /**
  * Методы для удобной работы с AJAX
@@ -37,38 +37,46 @@ export class AjaxHelpers implements KN.IAjaxHelpersService {
                 private apiUrl: string) {
     }
 
+    public RAW(method: string, url: string, data?: any, config?: KN.IRequestConfig) {
+        config = config || {};
+        _.assign(config, {
+            params: config.params || {}
+        });
+        config.url = this.buildUrl(url, config.params, config.noApi);
+        config.method = method.toLowerCase();
+        config.data = _.omitPrivateFields(data);
+
+        let deferred = this._addCanceling(config);
+        return this._convertToPromise(this.$http(config), deferred);
+    }
+
     /**
      * Отправляет GET запрос
      * @param {string} url Адрес запроса
      * Автоматически добавляется `apiUrl`, если в конфиге не задано `noApi=false`
      * @param {Object} [params] Параметры для подстановки в адрес
      * @param {Object} [config] Дополнительные параметры запроса (стандартные для `$http`)
-     * @returns {Promise}
      */
     public GET(url: string, params?: any, config?: KN.IRequestConfig) {
         config = config || {};
         _.assign(config, {
-            params: _.isUndefined(params) ? {} : params
+            params: params || {}
         });
-
-        let deferred = this._addCanceling(config);
-
-        url = this.buildUrl(url, params, config && config.noApi);
-
-        return this._convertToPromise(this.$http.get(url, config), deferred);
+        return this.RAW('get', url, undefined, config);
     }
-
+    /**
+     * Отправляет DELETE запрос
+     * @param {string} url Адрес запроса
+     * Автоматически добавляется `apiUrl`, если в конфиге не задано `noApi=false`
+     * @param {Object} [params] Параметры для подстановки в адрес
+     * @param {Object} [config] Дополнительные параметры запроса (стандартные для `$http`)
+     */
     public DELETE(url: string, params?: any, config?: KN.IRequestConfig) {
         config = config || {};
         _.assign(config, {
-            params: _.isUndefined(params) ? {} : params
+            params: params || {}
         });
-
-        let deferred = this._addCanceling(config);
-
-        url = this.buildUrl(url, params, config && config.noApi);
-
-        return this._convertToPromise(this.$http.delete(url, config), deferred);
+        return this.RAW('delete', url, undefined, config);
     }
 
     /**
@@ -77,24 +85,20 @@ export class AjaxHelpers implements KN.IAjaxHelpersService {
      * Автоматически добавляется `apiUrl`, если в конфиге не задано `noApi=false`
      * @param {Object} [data] Данные для отправки
      * @param {Object} [config] Дополнительные параметры запроса (стандартные для `$http`)
-     * @returns {Promise}
      */
     public POST(url: string, data?: any, config?: KN.IRequestConfig) {
-        config = config || {};
-        url = this.buildUrl(url, config.params, config.noApi);
-
-        let deferred = this._addCanceling(config);
-
-        return this._convertToPromise(this.$http.post(url, _.omitPrivateFields(data), config), deferred);
+        return this.RAW('post', url, data, config);
     }
 
+    /**
+     * Отправляет PUT запрос
+     * @param {string} url Адрес запроса
+     * Автоматически добавляется `apiUrl`, если в конфиге не задано `noApi=false`
+     * @param {Object} [data] Данные для отправки
+     * @param {Object} [config] Дополнительные параметры запроса (стандартные для `$http`)
+     */
     public PUT(url: string, data?: any, config?: KN.IRequestConfig) {
-        config = config || {};
-        url = this.buildUrl(url, config.params, config.noApi);
-
-        let deferred = this._addCanceling(config);
-
-        return this._convertToPromise(this.$http.put(url, _.omitPrivateFields(data), config), deferred);
+        return this.RAW('put', url, data, config);
     }
 
     /**

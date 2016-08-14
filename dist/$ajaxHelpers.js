@@ -1,5 +1,5 @@
 "use strict";
-var lodash_ext_1 = require('lodash-ext');
+var lodash_ext_1 = require("lodash-ext");
 var AjaxHelpers = (function () {
     function AjaxHelpers($http, $q, $timeout, apiUrl) {
         this.$http = $http;
@@ -7,35 +7,36 @@ var AjaxHelpers = (function () {
         this.$timeout = $timeout;
         this.apiUrl = apiUrl;
     }
+    AjaxHelpers.prototype.RAW = function (method, url, data, config) {
+        config = config || {};
+        lodash_ext_1.default.assign(config, {
+            params: config.params || {}
+        });
+        config.url = this.buildUrl(url, config.params, config.noApi);
+        config.method = method.toLowerCase();
+        config.data = lodash_ext_1.default.omitPrivateFields(data);
+        var deferred = this._addCanceling(config);
+        return this._convertToPromise(this.$http(config), deferred);
+    };
     AjaxHelpers.prototype.GET = function (url, params, config) {
         config = config || {};
         lodash_ext_1.default.assign(config, {
-            params: lodash_ext_1.default.isUndefined(params) ? {} : params
+            params: params || {}
         });
-        var deferred = this._addCanceling(config);
-        url = this.buildUrl(url, params, config && config.noApi);
-        return this._convertToPromise(this.$http.get(url, config), deferred);
+        return this.RAW('get', url, undefined, config);
     };
     AjaxHelpers.prototype.DELETE = function (url, params, config) {
         config = config || {};
         lodash_ext_1.default.assign(config, {
-            params: lodash_ext_1.default.isUndefined(params) ? {} : params
+            params: params || {}
         });
-        var deferred = this._addCanceling(config);
-        url = this.buildUrl(url, params, config && config.noApi);
-        return this._convertToPromise(this.$http.delete(url, config), deferred);
+        return this.RAW('delete', url, undefined, config);
     };
     AjaxHelpers.prototype.POST = function (url, data, config) {
-        config = config || {};
-        url = this.buildUrl(url, config.params, config.noApi);
-        var deferred = this._addCanceling(config);
-        return this._convertToPromise(this.$http.post(url, lodash_ext_1.default.omitPrivateFields(data), config), deferred);
+        return this.RAW('post', url, data, config);
     };
     AjaxHelpers.prototype.PUT = function (url, data, config) {
-        config = config || {};
-        url = this.buildUrl(url, config.params, config.noApi);
-        var deferred = this._addCanceling(config);
-        return this._convertToPromise(this.$http.put(url, lodash_ext_1.default.omitPrivateFields(data), config), deferred);
+        return this.RAW('put', url, data, config);
     };
     AjaxHelpers.prototype.buildCacheKey = function (url, params) {
         params = params || {};
